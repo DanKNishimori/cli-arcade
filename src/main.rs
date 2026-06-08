@@ -1,27 +1,30 @@
 use std::io::{self, Write};
 
+mod guessing;
+
 fn main() {
     println!("<< Welcome to the CLI Arcade! >>\n");
 
     loop {
-        print_input(">>> ");
-        let command = match get_input() {
+        let command = match input(">>> ") {
             Some(c) => c,
             None => continue,
         };
 
-        if command.contains("!quit") {
+        if command.trim().starts_with("guessing") {
+            guessing::GuessingGame::new().start();
+        }
+
+        if command.trim() == "!quit" {
             break;
         }
     }
 }
 
-fn print_input(message: &str) {
+fn input(message: &str) -> Option<String> {
     print!("{message}");
     io::stdout().flush().unwrap();
-}
 
-fn get_input() -> Option<String> {
     let mut content = String::new();
     io::stdin()
         .read_line(&mut content)
@@ -30,5 +33,5 @@ fn get_input() -> Option<String> {
     if content.trim().is_empty() {
         return None;
     }
-    Some(content.trim().to_owned())
+    Some(content.to_owned())
 }
