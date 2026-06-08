@@ -8,10 +8,10 @@ pub struct GuessingGame {
     tries: i16,
 }
 impl GuessingGame {
-    pub fn new() -> GuessingGame {
+    pub fn new(hardness: Hardness) -> GuessingGame {
         GuessingGame {
             secret: random_range(01..99),
-            tries: 15,
+            tries: give_tries(hardness),
         }
     }
 
@@ -48,4 +48,18 @@ impl GuessingGame {
             }
         }
     }
+}
+
+fn give_tries(hardness: Hardness) -> i16 {
+    match hardness {
+        Hardness::Easy => 20,
+        Hardness::Medium => 15,
+        Hardness::Hard => 7,
+    }
+}
+
+pub enum Hardness {
+    Easy,
+    Medium,
+    Hard,
 }

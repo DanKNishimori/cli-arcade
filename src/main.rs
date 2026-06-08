@@ -2,6 +2,8 @@ use std::io::{self, Write};
 
 mod guessing;
 
+use guessing::{GuessingGame, Hardness};
+
 fn main() {
     println!("<< Welcome to the CLI Arcade! >>\n");
 
@@ -12,7 +14,7 @@ fn main() {
         };
 
         if command.trim().starts_with("guessing") {
-            guessing::GuessingGame::new().start();
+            GuessingGame::new(Hardness::Medium).start();
         }
 
         if command.trim() == "!quit" {
