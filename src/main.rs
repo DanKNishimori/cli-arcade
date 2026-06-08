@@ -10,7 +10,7 @@ fn main() {
 
     loop {
         let command = match input(">>> ") {
-            Some(c) => c,
+            Some(c) => c.to_lowercase(),
             None => continue,
         };
 
