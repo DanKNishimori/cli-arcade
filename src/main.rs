@@ -1,4 +1,3 @@
-use crossterm::{cursor, execute, terminal};
 use std::io::{self, Write};
 
 mod guessing;
@@ -15,7 +14,7 @@ fn main() {
         };
 
         if command.trim().starts_with("guessing") {
-            println!("");
+            println!("Before start, in what difficulty you like to play?");
             println!("1) Easy  2) Medium  3) Hard");
             let hardness = match input("? ") {
                 Some(s) => match s.trim() {
@@ -25,6 +24,7 @@ fn main() {
                 },
                 None => Hardness::Medium,
             };
+            println!();
             GuessingGame::new(hardness).start();
         }
 

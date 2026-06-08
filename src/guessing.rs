@@ -16,7 +16,8 @@ impl GuessingGame {
     }
 
     pub fn start(&mut self) {
-        println!("Ok, try to guess my number.\n");
+        println!("<[ Guessing Game ]>");
+        println!("Hey, I have a secret number,\n");
 
         loop {
             if self.tries <= 0 {
@@ -39,8 +40,8 @@ impl GuessingGame {
 
             self.tries -= 1;
             match self.secret.cmp(&guess) {
-                Ordering::Less => println!("Too high!"),
-                Ordering::Greater => println!("Too low!"),
+                Ordering::Less => println!("{guess} is too high!"),
+                Ordering::Greater => println!("{guess} is too low!"),
                 Ordering::Equal => {
                     println!("RIGHT!\nYou win!\n");
                     break;
