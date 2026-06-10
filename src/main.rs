@@ -25,7 +25,7 @@ fn main() {
             GuessingGame::new(hardness).start();
         }
 
-        if command.trim() == "!quit" {
+        if command.starts_with("!quit") {
             break;
         }
     }

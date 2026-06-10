@@ -31,7 +31,7 @@ impl GuessingGame {
                 continue;
             };
 
-            let guess: i16 = match guess.trim().parse() {
+            let guess: i16 = match guess.parse() {
                 Ok(v) => v,
                 Err(_) => {
                     println!("Bad guess! Try some number like 1, 5, 42 or 100.");
