@@ -20,7 +20,7 @@ impl GuessingGame {
         println!("Hey, I have a secret number,\n");
 
         loop {
-            if self.tries <= 0 {
+            if self.has_tries() {
                 println!("you loose!");
                 break;
             }
@@ -37,7 +37,7 @@ impl GuessingGame {
                 }
             };
 
-            self.tries -= 1;
+            self.consume_try();
             match self.secret.cmp(&guess) {
                 Ordering::Less => println!("{guess} is too high!"),
                 Ordering::Greater => println!("{guess} is too low!"),
@@ -47,6 +47,14 @@ impl GuessingGame {
                 }
             }
         }
+    }
+
+    fn consume_try(&mut self) {
+        self.tries -= 1;
+    }
+
+    fn has_tries(&self) -> bool {
+        self.tries <= 0
     }
 }
 
