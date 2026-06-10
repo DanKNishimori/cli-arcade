@@ -3,6 +3,8 @@ use std::cmp::Ordering;
 
 use super::input;
 
+const MINIMIUM_FOR_WIN: i16 = 7;
+
 pub struct GuessingGame {
     secret: i16,
     tries: i16,
@@ -60,9 +62,9 @@ impl GuessingGame {
 
 fn give_tries(hardness: Hardness) -> i16 {
     match hardness {
-        Hardness::Easy => 20,
-        Hardness::Medium => 15,
-        Hardness::Hard => 7,
+        Hardness::Easy => MINIMIUM_FOR_WIN * 3,
+        Hardness::Medium => MINIMIUM_FOR_WIN * 2,
+        Hardness::Hard => MINIMIUM_FOR_WIN,
     }
 }
 
