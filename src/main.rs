@@ -16,13 +16,10 @@ fn main() {
         if command.starts_with("guessing") {
             println!("Before start, in what difficulty you like to play?");
             println!("1) Easy  2) Medium  3) Hard");
-            let hardness = match input("? ") {
-                Some(s) => match s.trim() {
-                    "1" => Hardness::Easy,
-                    "3" => Hardness::Hard,
-                    _ => Hardness::Medium,
-                },
-                None => Hardness::Medium,
+            let hardness = match input("? ").as_deref() {
+                Some("1") => Hardness::Easy,
+                Some("3") => Hardness::Hard,
+                _ => Hardness::Medium,
             };
             println!();
             GuessingGame::new(hardness).start();
