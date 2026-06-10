@@ -13,7 +13,7 @@ fn main() {
             None => continue,
         };
 
-        if command.trim().starts_with("guessing") {
+        if command.starts_with("guessing") {
             println!("Before start, in what difficulty you like to play?");
             println!("1) Easy  2) Medium  3) Hard");
             let hardness = match input("? ") {
@@ -43,8 +43,10 @@ fn input(message: &str) -> Option<String> {
         .read_line(&mut content)
         .expect("input error on read");
 
-    if content.trim().is_empty() {
+    let trimmed_content = content.trim();
+
+    if trimmed_content.is_empty() {
         return None;
     }
-    Some(content.to_owned())
+    Some(trimmed_content.to_string())
 }
