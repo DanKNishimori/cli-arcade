@@ -22,7 +22,7 @@ impl GuessingGame {
         println!("Hey, I have a secret number,\n");
 
         loop {
-            if self.has_tries() {
+            if !self.has_tries() {
                 println!("you loose!");
                 break;
             }
@@ -56,7 +56,7 @@ impl GuessingGame {
     }
 
     fn has_tries(&self) -> bool {
-        self.tries <= 0
+        self.tries >= 0
     }
 }
 
