@@ -25,9 +25,8 @@ impl GuessingGame {
                 break;
             }
 
-            let guess = match input("what's your guess? ") {
-                Some(g) => g,
-                None => continue,
+            let Some(guess) = input("what's your guess? ") else {
+                continue;
             };
 
             let guess: i16 = match guess.trim().parse() {
