@@ -5,6 +5,8 @@ use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
 #[allow(unused)]
 use super::input;
 
+const ROW_OFFSET: usize = 3;
+
 #[allow(unused)]
 #[derive(Clone, Copy)]
 enum TileMark {
@@ -68,9 +70,9 @@ fn parse_coordinates(position: &str) -> Result<usize, BadCoodinateError> {
     }
 
     match y {
-        "a" | "A" => Ok(1 * x - 1),
-        "b" | "B" => Ok(2 * x - 1),
-        "c" | "C" => Ok(3 * x - 1),
+        "a" | "A" => Ok(0 * ROW_OFFSET + x - 1),
+        "b" | "B" => Ok(1 * ROW_OFFSET + x - 1),
+        "c" | "C" => Ok(2 * ROW_OFFSET + x - 1),
         _other => Err(OutRangeError),
     }
 }
