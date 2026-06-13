@@ -42,9 +42,11 @@ impl TicTacToe {
     }
 
     pub fn start(&mut self) {
+        let mut warning = "";
+
         loop {
             self.render_board();
-            println!();
+            println!("{warning}");
             let Some(pos) = input("next mark: ") else {
                 continue;
             };
@@ -53,12 +55,17 @@ impl TicTacToe {
                 Err(WorngSizeError) => todo!(),
                 Err(OutRangeError) => todo!(),
             };
-            if self.board[new_mark_position] != TileMark::None {
-                self.clear_screen();
-                continue;
+            match self.update_board(new_mark_position) {
+                Ok(_) => {
+                    warning = "";
+                    self.flip_mark()
+                }
+                Err(TileOverrideError) => {
+                    warning = "You cannot take the others tile!";
+                    self.clear_screen();
+                    continue;
+                }
             }
-            self.board[new_mark_position] = self.next_mark;
-            self.flip_mark();
 
             self.clear_screen();
         }
@@ -74,6 +81,14 @@ impl TicTacToe {
             TileMark::O => TileMark::X,
             TileMark::None => todo!(),
         }
+    }
+
+    fn update_board(&mut self, position: usize) -> Result<(), TileOverrideError> {
+        if self.board[position] != TileMark::None {
+            return Err(TileOverrideError);
+        }
+        self.board[position] = self.next_mark;
+        Ok(())
     }
 
     fn render_board(&self) {
@@ -111,3 +126,6 @@ enum BadCoodinateError {
     WorngSizeError,
     OutRangeError,
 }
+
+#[derive(Debug)]
+struct TileOverrideError;
