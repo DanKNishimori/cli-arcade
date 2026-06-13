@@ -1,4 +1,10 @@
-use std::fmt::Display;
+use std::{fmt::Display, io::stdout};
+
+use crossterm::{
+    cursor::{self, position},
+    execute,
+    terminal::{Clear, ClearType::FromCursorDown},
+};
 
 use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
 
@@ -35,16 +41,21 @@ impl TicTacToe {
     }
 
     pub fn start(&mut self) {
-        let positions = vec![
-            parse_coordinates("a1").unwrap(),
-            parse_coordinates("b2").unwrap(),
-            parse_coordinates("c3").unwrap(),
-        ];
-        for i in positions {
-            self.board[i] = TileMark::X;
-        }
+        loop {
+            self.render_board();
+            println!();
+            let Some(pos) = input("next mark: ") else {
+                continue;
+            };
+            let new_mark_position = match parse_coordinates(&pos) {
+                Ok(o) => o,
+                Err(WorngSizeError) => todo!(),
+                Err(OutRangeError) => todo!(),
+            };
+            self.board[new_mark_position] = TileMark::O;
 
-        self.render_board();
+            execute!(stdout(), cursor::MoveUp(10), Clear(FromCursorDown)).unwrap()
+        }
     }
 
     fn render_board(&self) {
