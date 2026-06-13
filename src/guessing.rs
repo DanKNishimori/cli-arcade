@@ -1,3 +1,4 @@
+use crossterm::{cursor, execute, terminal};
 use rand::random_range;
 use std::cmp::Ordering;
 
@@ -17,11 +18,19 @@ impl GuessingGame {
         }
     }
 
-    pub fn start(&mut self) {
-        println!("<[ Guessing Game ]>");
-        println!("Hey, I have a secret number,\n");
+    pub fn start(&mut self) -> std::io::Result<()> {
+        let mut stdout = std::io::stdout();
+
+        println!("\n<[ Guessing Game ]>");
+        println!("Hey, I have a secret number,\n\n\n");
 
         loop {
+            execute!(
+                stdout,
+                cursor::MoveUp(3),
+                terminal::Clear(terminal::ClearType::CurrentLine)
+            )?;
+
             if !self.has_tries() {
                 println!("you loose!");
                 break;
@@ -30,6 +39,7 @@ impl GuessingGame {
             let Some(guess) = input("what's your guess? ") else {
                 continue;
             };
+            println!();
 
             let guess: i16 = match guess.parse() {
                 Ok(v) => v,
@@ -44,11 +54,13 @@ impl GuessingGame {
                 Ordering::Less => println!("{guess} is too high!"),
                 Ordering::Greater => println!("{guess} is too low!"),
                 Ordering::Equal => {
+                    execute!(stdout, terminal::Clear(terminal::ClearType::FromCursorDown))?;
                     println!("RIGHT!\nYou win!\n");
                     break;
                 }
             }
         }
+        Ok(())
     }
 
     fn consume_try(&mut self) {

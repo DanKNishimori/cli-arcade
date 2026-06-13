@@ -1,4 +1,5 @@
-use std::io::{self, Write};
+use crossterm::{cursor, execute, terminal};
+use std::io::{self, Write, stdout};
 
 mod guessing;
 
@@ -21,8 +22,14 @@ fn main() {
                 Some("3") => Hardness::Hard,
                 _ => Hardness::Medium,
             };
-            println!();
-            GuessingGame::new(hardness).start();
+
+            execute!(
+                stdout(),
+                cursor::MoveUp(3),
+                terminal::Clear(terminal::ClearType::FromCursorDown)
+            )
+            .expect("some error");
+            GuessingGame::new(hardness).start().unwrap(); // living dangerously
         }
 
         if command.starts_with("!quit") {
