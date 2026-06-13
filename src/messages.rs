@@ -79,7 +79,7 @@ make_formatted_msg!(
 // — Tic-Tac-Toe messages ————————————————————————————————————————————————————
 // ———————————————————————————————————————————————————————————————————————————
 
-make_message!(WRONG_SIZE: "Pay attention to the format of coordinates!");
+make_message!(WRONG_SIZE: "Please, type a valid input! (e.g.: A1)");
 
 make_message!(OUT_RANGE: "Pay attention to the size of the board!");
 
