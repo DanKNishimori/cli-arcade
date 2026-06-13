@@ -3,9 +3,12 @@ use std::io::{self, Write, stdout};
 
 mod guessing;
 mod messages;
+mod tictactoe;
 
 use guessing::{GuessingGame, Hardness};
 use messages::*;
+
+use crate::tictactoe::TicTacToe;
 
 fn main() {
     println!("{OPEN}");
@@ -31,6 +34,8 @@ fn main() {
             )
             .expect("some error");
             GuessingGame::new(hardness).start().unwrap(); // living dangerously
+        } else if command.starts_with("tictac") {
+            TicTacToe::new().test();
         } else if command.starts_with("help") {
             println!("{HELP}");
         }
