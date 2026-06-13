@@ -48,18 +48,21 @@ impl TicTacToe {
         loop {
             self.render_board();
             println!("{warning}");
-            let Some(pos) = input("next mark: ") else {
+            let raw_position = input("next mark: ");
+
+            self.clear_screen();
+
+            let Some(position) = raw_position else {
                 continue;
             };
-            let new_mark_position = match parse_coordinates(&pos) {
+
+            let new_mark_position = match parse_coordinates(&position) {
                 Ok(o) => o,
                 Err(e) => {
                     warning = e.render_text();
                     continue;
                 }
             };
-
-            self.clear_screen();
 
             match self.update_board(new_mark_position) {
                 Ok(_) => {
