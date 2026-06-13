@@ -6,6 +6,7 @@ use crossterm::execute;
 use crossterm::terminal::{Clear, ClearType::FromCursorDown};
 
 use super::input;
+use super::messages::*;
 use crate::tictactoe::BadCoodinateError::{OutRangeError, WrongSizeError};
 
 const ROW_OFFSET: usize = 3;
@@ -52,8 +53,10 @@ impl TicTacToe {
             };
             let new_mark_position = match parse_coordinates(&pos) {
                 Ok(o) => o,
-                Err(WrongSizeError) => todo!(),
-                Err(OutRangeError) => todo!(),
+                Err(e) => {
+                    warning = e.render_text();
+                    continue;
+                }
             };
 
             self.clear_screen();
@@ -64,7 +67,7 @@ impl TicTacToe {
                     self.flip_mark()
                 }
                 Err(TileOverrideError) => {
-                    warning = "You cannot take the others tile!";
+                    warning = TILE_OVERRIDE;
                     continue;
                 }
             }
@@ -125,6 +128,14 @@ fn parse_coordinates(position: &str) -> Result<usize, BadCoodinateError> {
 enum BadCoodinateError {
     WrongSizeError,
     OutRangeError,
+}
+impl BadCoodinateError {
+    fn render_text(self) -> &'static str {
+        match self {
+            WrongSizeError => WRONG_SIZE,
+            OutRangeError => OUT_RANGE,
+        }
+    }
 }
 
 #[derive(Debug)]

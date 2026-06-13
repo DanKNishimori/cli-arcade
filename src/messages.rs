@@ -74,3 +74,13 @@ make_formatted_msg!(
 make_formatted_msg!(
     it_is_lower_hint(guess: i16) : "\n{guess} is too low!"
 );
+
+// ———————————————————————————————————————————————————————————————————————————
+// — Tic-Tac-Toe messages ————————————————————————————————————————————————————
+// ———————————————————————————————————————————————————————————————————————————
+
+make_message!(WRONG_SIZE: "Pay attention to the format of coordinates!");
+
+make_message!(OUT_RANGE: "Pay attention to the size of the board!");
+
+make_message!(TILE_OVERRIDE: "You can't take the others tile!");
