@@ -1,4 +1,7 @@
-use std::{fmt::Display, io::stdout};
+use std::{
+    fmt::Display,
+    io::{Stdout, stdout},
+};
 
 use crossterm::{
     cursor::{self, position},
@@ -33,12 +36,14 @@ impl Display for TileMark {
 pub struct TicTacToe {
     board: [TileMark; 9],
     next_mark: TileMark,
+    stdout: Stdout,
 }
 impl TicTacToe {
     pub fn new() -> Self {
         Self {
             board: [TileMark::None; 9],
             next_mark: TileMark::O,
+            stdout: stdout(),
         }
     }
 
@@ -55,13 +60,18 @@ impl TicTacToe {
                 Err(OutRangeError) => todo!(),
             };
             if self.board[new_mark_position] != TileMark::None {
+                self.clear_screen();
                 continue;
             }
             self.board[new_mark_position] = self.next_mark;
             self.flip_mark();
 
-            execute!(stdout(), cursor::MoveUp(10), Clear(FromCursorDown)).unwrap()
+            self.clear_screen();
         }
+    }
+
+    fn clear_screen(&mut self) {
+        execute!(&mut self.stdout, cursor::MoveUp(10), Clear(FromCursorDown)).unwrap()
     }
 
     fn flip_mark(&mut self) {
