@@ -90,11 +90,15 @@ impl TicTacToe {
     }
 
     fn update_board(&mut self, position: usize) -> Result<(), TileOverrideError> {
-        if self.board[position] != TileMark::None {
+        if self.is_taken_tile(position) {
             return Err(TileOverrideError);
         }
         self.board[position] = self.next_mark;
         Ok(())
+    }
+
+    fn is_taken_tile(&self, position: usize) -> bool {
+        self.board[position] != TileMark::None
     }
 
     fn render_board(&self) {
