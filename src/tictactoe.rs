@@ -1,18 +1,12 @@
-use std::{
-    fmt::Display,
-    io::{Stdout, stdout},
-};
+use std::fmt::Display;
+use std::io::{Stdout, stdout};
 
-use crossterm::{
-    cursor::{self, position},
-    execute,
-    terminal::{Clear, ClearType::FromCursorDown},
-};
+use crossterm::cursor;
+use crossterm::execute;
+use crossterm::terminal::{Clear, ClearType::FromCursorDown};
 
-use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
-
-#[allow(unused)]
 use super::input;
+use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
 
 const ROW_OFFSET: usize = 3;
 

@@ -1,5 +1,6 @@
 use crossterm::{cursor, execute, terminal};
-use std::io::{self, Write, stdout};
+use std::io;
+use std::io::{Write, stdout};
 
 mod guessing;
 mod messages;
