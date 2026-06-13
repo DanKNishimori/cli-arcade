@@ -49,9 +49,9 @@ impl GuessingGame {
             };
 
             self.consume_try();
-            match self.secret.cmp(&guess) {
-                Ordering::Less => it_is_higher_hint(guess),
-                Ordering::Greater => it_is_lower_hint(guess),
+            match guess.cmp(&self.secret) {
+                Ordering::Less => it_is_lower_hint(guess),
+                Ordering::Greater => it_is_higher_hint(guess),
                 Ordering::Equal => {
                     execute!(stdout, terminal::Clear(terminal::ClearType::FromCursorDown))?;
                     println!("{WIN}");
