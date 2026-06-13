@@ -32,11 +32,13 @@ impl Display for TileMark {
 
 pub struct TicTacToe {
     board: [TileMark; 9],
+    next_mark: TileMark,
 }
 impl TicTacToe {
     pub fn new() -> Self {
         Self {
             board: [TileMark::None; 9],
+            next_mark: TileMark::O,
         }
     }
 
@@ -52,9 +54,18 @@ impl TicTacToe {
                 Err(WorngSizeError) => todo!(),
                 Err(OutRangeError) => todo!(),
             };
-            self.board[new_mark_position] = TileMark::O;
+            self.board[new_mark_position] = self.next_mark;
+            self.flip_mark();
 
             execute!(stdout(), cursor::MoveUp(10), Clear(FromCursorDown)).unwrap()
+        }
+    }
+
+    fn flip_mark(&mut self) {
+        self.next_mark = match self.next_mark {
+            TileMark::X => TileMark::O,
+            TileMark::O => TileMark::X,
+            TileMark::None => todo!(),
         }
     }
 
