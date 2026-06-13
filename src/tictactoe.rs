@@ -6,7 +6,7 @@ use crossterm::execute;
 use crossterm::terminal::{Clear, ClearType::FromCursorDown};
 
 use super::input;
-use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
+use crate::tictactoe::BadCoodinateError::{OutRangeError, WrongSizeError};
 
 const ROW_OFFSET: usize = 3;
 
@@ -52,7 +52,7 @@ impl TicTacToe {
             };
             let new_mark_position = match parse_coordinates(&pos) {
                 Ok(o) => o,
-                Err(WorngSizeError) => todo!(),
+                Err(WrongSizeError) => todo!(),
                 Err(OutRangeError) => todo!(),
             };
 
@@ -104,7 +104,7 @@ impl TicTacToe {
 
 fn parse_coordinates(position: &str) -> Result<usize, BadCoodinateError> {
     if position.len() != 2 {
-        return Err(WorngSizeError);
+        return Err(WrongSizeError);
     }
     let (y, x) = position.split_at(1);
     let x: usize = x.parse().unwrap();
@@ -123,7 +123,7 @@ fn parse_coordinates(position: &str) -> Result<usize, BadCoodinateError> {
 
 #[derive(Debug)]
 enum BadCoodinateError {
-    WorngSizeError,
+    WrongSizeError,
     OutRangeError,
 }
 
