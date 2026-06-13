@@ -2,36 +2,13 @@ use crossterm::{cursor, execute, terminal};
 use std::io::{self, Write, stdout};
 
 mod guessing;
+mod messages;
 
 use guessing::{GuessingGame, Hardness};
-
-const HELP_MSG: &str = "
-┌────────────────────────────────────────────────────────────────────────┐
-│                          CLI ARCADE - HELP MENU                        │
-└────────────────────────────────────────────────────────────────────────┘
-
-COMMAND STRUCTURE:
-  > [game name] [options...]
-
-GAMES AVAILABLE:
-  • tictactoe
-  • guessing <easy|medium|hard>
-  • hangman <theme_name>
-    Available themes match the filenames in the words folder.
-     - <list>
-
-EXIT:
-  • Type or add '&quit' to exit.
-  • If its placed after a game tittle, it will close the Arcade after your game concludes.
-  
-Examples:
-  > tictactoe
-  > guessing hard &quit
-";
+use messages::*;
 
 fn main() {
-    println!("<< Welcome to the CLI Arcade! >>\n");
-    println!("Type \"help\" for more information.");
+    println!("{OPEN}");
 
     loop {
         let command = match input(">>> ") {
@@ -40,8 +17,7 @@ fn main() {
         };
 
         if command.starts_with("guessing") {
-            println!("Before start, in what difficulty you like to play?");
-            println!("1) Easy  2) Medium  3) Hard");
+            println!("{WHICH_HARDNESS}");
             let hardness = match input("? ").as_deref() {
                 Some("1") => Hardness::Easy,
                 Some("3") => Hardness::Hard,
@@ -50,16 +26,16 @@ fn main() {
 
             execute!(
                 stdout(),
-                cursor::MoveUp(3),
+                cursor::MoveUp(4),
                 terminal::Clear(terminal::ClearType::FromCursorDown)
             )
             .expect("some error");
             GuessingGame::new(hardness).start().unwrap(); // living dangerously
         } else if command.starts_with("help") {
-            println!("{HELP_MSG}");
+            println!("{HELP}");
         }
 
-        if command.contains("!quit") {
+        if command.contains("&quit") {
             break;
         }
     }

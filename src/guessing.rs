@@ -3,6 +3,7 @@ use rand::random_range;
 use std::cmp::Ordering;
 
 use super::input;
+use super::messages::*;
 
 const MINIMIUM_FOR_WIN: i16 = 7;
 
@@ -21,8 +22,7 @@ impl GuessingGame {
     pub fn start(&mut self) -> std::io::Result<()> {
         let mut stdout = std::io::stdout();
 
-        println!("\n<[ Guessing Game ]>");
-        println!("Hey, I have a secret number,\n\n\n");
+        println!("{START_GUESSING_GAME}\n\n");
 
         loop {
             execute!(
@@ -32,30 +32,29 @@ impl GuessingGame {
             )?;
 
             if !self.has_tries() {
-                println!("you loose!");
+                print_loose_with(self.secret);
                 break;
             }
 
-            let Some(guess) = input("what's your guess? ") else {
+            let Some(guess) = input(GET_GUESS) else {
                 continue;
             };
-            println!();
 
             let guess: i16 = match guess.parse() {
                 Ok(v) => v,
                 Err(_) => {
-                    println!("Bad guess! Try some number like 1, 5, 42 or 100.");
+                    println!("{BAD_INPUT}");
                     continue;
                 }
             };
 
             self.consume_try();
             match self.secret.cmp(&guess) {
-                Ordering::Less => println!("{guess} is too high!"),
-                Ordering::Greater => println!("{guess} is too low!"),
+                Ordering::Less => it_is_higher_hint(guess),
+                Ordering::Greater => it_is_lower_hint(guess),
                 Ordering::Equal => {
                     execute!(stdout, terminal::Clear(terminal::ClearType::FromCursorDown))?;
-                    println!("RIGHT!\nYou win!\n");
+                    println!("{WIN}");
                     break;
                 }
             }
