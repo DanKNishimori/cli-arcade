@@ -1,7 +1,11 @@
 use std::fmt::Display;
 
+use crate::tictactoe::BadCoodinateError::{OutRangeError, WorngSizeError};
+
+#[allow(unused)]
 use super::input;
 
+#[allow(unused)]
 #[derive(Clone, Copy)]
 enum TileMark {
     X,
@@ -28,13 +32,17 @@ impl TicTacToe {
         }
     }
 
-    pub fn test(&self) {
-        self.render_board();
-    }
-
-    #[allow(unused)]
     pub fn start(&mut self) {
-        todo!()
+        let positions = vec![
+            parse_coordinates("a1").unwrap(),
+            parse_coordinates("b2").unwrap(),
+            parse_coordinates("c3").unwrap(),
+        ];
+        for i in positions {
+            self.board[i] = TileMark::X;
+        }
+
+        self.render_board();
     }
 
     fn render_board(&self) {
@@ -46,4 +54,29 @@ impl TicTacToe {
         }
         println!(" ─┴───┴───┴───┘");
     }
+}
+
+fn parse_coordinates(position: &str) -> Result<usize, BadCoodinateError> {
+    if position.len() != 2 {
+        return Err(WorngSizeError);
+    }
+    let (y, x) = position.split_at(1);
+    let x: usize = x.parse().unwrap();
+
+    if x > 3 || x < 1 {
+        return Err(OutRangeError);
+    }
+
+    match y {
+        "a" | "A" => Ok(1 * x - 1),
+        "b" | "B" => Ok(2 * x - 1),
+        "c" | "C" => Ok(3 * x - 1),
+        _other => Err(OutRangeError),
+    }
+}
+
+#[derive(Debug)]
+enum BadCoodinateError {
+    WorngSizeError,
+    OutRangeError,
 }
