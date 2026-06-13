@@ -5,8 +5,33 @@ mod guessing;
 
 use guessing::{GuessingGame, Hardness};
 
+const HELP_MSG: &str = "
+┌────────────────────────────────────────────────────────────────────────┐
+│                          CLI ARCADE - HELP MENU                        │
+└────────────────────────────────────────────────────────────────────────┘
+
+COMMAND STRUCTURE:
+  > [game name] [options...]
+
+GAMES AVAILABLE:
+  • tictactoe
+  • guessing <easy|medium|hard>
+  • hangman <theme_name>
+    Available themes match the filenames in the words folder.
+     - <list>
+
+EXIT:
+  • Type or add '&quit' to exit.
+  • If its placed after a game tittle, it will close the Arcade after your game concludes.
+  
+Examples:
+  > tictactoe
+  > guessing hard &quit
+";
+
 fn main() {
     println!("<< Welcome to the CLI Arcade! >>\n");
+    println!("Type \"help\" for more information.");
 
     loop {
         let command = match input(">>> ") {
@@ -30,9 +55,11 @@ fn main() {
             )
             .expect("some error");
             GuessingGame::new(hardness).start().unwrap(); // living dangerously
+        } else if command.starts_with("help") {
+            println!("{HELP_MSG}");
         }
 
-        if command.starts_with("!quit") {
+        if command.contains("!quit") {
             break;
         }
     }
