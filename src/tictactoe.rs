@@ -67,18 +67,15 @@ impl TicTacToe {
             match self.update_board(new_mark_position) {
                 Ok(_) => {
                     warning = "";
-                    self.flip_mark()
+                    self.flip_mark();
                 }
-                Err(TileOverrideError) => {
-                    warning = TILE_OVERRIDE;
-                    continue;
-                }
+                Err(TileOverrideError) => warning = TILE_OVERRIDE,
             }
         }
     }
 
     fn clear_screen(&mut self) {
-        execute!(&mut self.stdout, cursor::MoveUp(10), Clear(FromCursorDown)).unwrap()
+        execute!(&mut self.stdout, cursor::MoveUp(10), Clear(FromCursorDown)).unwrap();
     }
 
     fn flip_mark(&mut self) {
