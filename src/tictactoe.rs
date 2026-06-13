@@ -55,6 +55,9 @@ impl TicTacToe {
                 Err(WorngSizeError) => todo!(),
                 Err(OutRangeError) => todo!(),
             };
+
+            self.clear_screen();
+
             match self.update_board(new_mark_position) {
                 Ok(_) => {
                     warning = "";
@@ -62,12 +65,9 @@ impl TicTacToe {
                 }
                 Err(TileOverrideError) => {
                     warning = "You cannot take the others tile!";
-                    self.clear_screen();
                     continue;
                 }
             }
-
-            self.clear_screen();
         }
     }
 
