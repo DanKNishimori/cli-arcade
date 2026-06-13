@@ -14,7 +14,7 @@ use super::input;
 const ROW_OFFSET: usize = 3;
 
 #[allow(unused)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 enum TileMark {
     X,
     O,
@@ -54,6 +54,9 @@ impl TicTacToe {
                 Err(WorngSizeError) => todo!(),
                 Err(OutRangeError) => todo!(),
             };
+            if self.board[new_mark_position] != TileMark::None {
+                continue;
+            }
             self.board[new_mark_position] = self.next_mark;
             self.flip_mark();
 
