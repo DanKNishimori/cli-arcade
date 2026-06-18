@@ -10,6 +10,16 @@ use super::messages::*;
 use crate::tictactoe::BadCoodinateError::{OutRangeError, WrongSizeError};
 
 const ROW_OFFSET: usize = 3;
+const WINNING_MASKS: [u16; 8] = [
+    0b000_000_111,
+    0b000_111_000,
+    0b111_000_000,
+    0b001_001_001,
+    0b010_010_010,
+    0b100_100_100,
+    0b100_010_001,
+    0b001_010_100,
+];
 
 #[allow(unused)]
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -48,6 +58,11 @@ impl TicTacToe {
         loop {
             self.render_board();
             println!("{warning}");
+            if let Some(result) = self.check_winner() {
+                println!("the {result} has won!");
+                break;
+            }
+
             let raw_position = input("next mark: ");
 
             self.clear_screen();
@@ -72,6 +87,40 @@ impl TicTacToe {
                 Err(TileOverrideError) => warning = TILE_OVERRIDE,
             }
         }
+    }
+
+    fn check_winner(&self) -> Option<TileMark> {
+        if self.has_won(TileMark::X) {
+            Some(TileMark::X)
+        } else if self.has_won(TileMark::O) {
+            Some(TileMark::O)
+        } else if !self.board.contains(&TileMark::None) {
+            Some(TileMark::None)
+        } else {
+            None
+        }
+    }
+
+    fn has_won(&self, player: TileMark) -> bool {
+        let player_board = self.get_player_bitboard(player);
+        for mask in WINNING_MASKS {
+            if (player_board & mask) == mask {
+                return true;
+            }
+        }
+        false
+    }
+
+    fn get_player_bitboard(&self, player: TileMark) -> u16 {
+        let mut bitboard: u16 = 0;
+
+        for (i, cell) in self.board.iter().enumerate() {
+            if *cell == player {
+                bitboard |= 1 << i;
+            }
+        }
+
+        bitboard
     }
 
     fn clear_screen(&mut self) {
