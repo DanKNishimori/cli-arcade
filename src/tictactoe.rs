@@ -22,7 +22,7 @@ const WINNING_MASKS: [u16; 8] = [
 ];
 
 #[allow(unused)]
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum TileMark {
     X,
     O,
@@ -193,3 +193,45 @@ impl BadCoodinateError {
 
 #[derive(Debug)]
 struct TileOverrideError;
+
+// ———————————————————————————————————————————————————————————————————————
+// — Tests Area ——————————————————————————————————————————————————————————
+// ———————————————————————————————————————————————————————————————————————
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn if_tilemarks_are_rendered_properly() {
+        assert_eq!(TileMark::X.to_string(), "X".to_string());
+        assert_eq!(TileMark::O.to_string(), "O".to_string());
+        assert_eq!(TileMark::None.to_string(), " ".to_string());
+    }
+
+    #[test]
+    fn if_initial_board_is_empty() {
+        let game = TicTacToe::new();
+        for i in 0..8 {
+            assert_eq!(game.is_taken_tile(i), false);
+        }
+    }
+
+    #[test]
+    fn if_the_board_is_updadte_properly() {
+        let mut game = TicTacToe::new();
+        game.next_mark = TileMark::O;
+        if let Err(e) = game.update_board(3) {
+            panic!("{:?}", e);
+        }
+
+        for i in 0..8 {
+            if i == 3 {
+                assert_eq!(game.is_taken_tile(i), true);
+                assert_eq!(game.board[i], TileMark::O);
+            } else {
+                assert_eq!(game.is_taken_tile(i), false);
+            }
+        }
+    }
+}
