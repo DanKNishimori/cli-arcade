@@ -60,10 +60,12 @@ impl NoughtsAndCrosses {
             self.render_board();
             println!("{warning}");
             if let Some(result) = self.check_winner() {
-                if result == TileMark::None {
-                    println!("It is a TIE!")
-                }
-                println!("the {result} has won!");
+                let msg = match result {
+                    TileMark::X => X_WIN,
+                    TileMark::O => O_WIN,
+                    TileMark::None => DRAW,
+                };
+                println!("{msg}");
                 break;
             }
 

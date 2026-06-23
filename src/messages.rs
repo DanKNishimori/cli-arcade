@@ -79,6 +79,10 @@ make_formatted_msg!(
 // — Tic-Tac-Toe messages ————————————————————————————————————————————————————
 // ———————————————————————————————————————————————————————————————————————————
 
+make_message!(X_WIN: "The X has won!");
+make_message!(O_WIN: "The O has won!");
+make_message!(DRAW: "Finished, it's a DRAW!");
+
 make_message!(WRONG_SIZE: "Please, type a valid input! (e.g.: A1)");
 
 make_message!(OUT_RANGE: "Pay attention to the size of the board!");
