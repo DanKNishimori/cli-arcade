@@ -36,7 +36,7 @@ fn main() {
             .expect("some error");
             GuessingGame::new(hardness).start().unwrap(); // living dangerously
         } else if command.starts_with("tictac") {
-            TicTacToe::new().start();
+            TicTacToe::new().randomize_player().start();
         } else if command.starts_with("help") {
             println!("{HELP}");
         }

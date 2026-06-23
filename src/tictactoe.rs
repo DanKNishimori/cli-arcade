@@ -4,6 +4,7 @@ use std::io::{Stdout, stdout};
 use crossterm::cursor;
 use crossterm::execute;
 use crossterm::terminal::{Clear, ClearType::FromCursorDown};
+use rand::{prelude::*, rng};
 
 use super::input;
 use super::messages::*;
@@ -89,6 +90,15 @@ impl TicTacToe {
         }
     }
 
+    pub fn randomize_player(mut self) -> Self {
+        let drew_player = [TileMark::X, TileMark::O]
+            .choose(&mut rng())
+            .unwrap()
+            .to_owned();
+        self.next_mark = drew_player;
+        self
+    }
+
     fn check_winner(&self) -> Option<TileMark> {
         if self.has_won(TileMark::X) {
             Some(TileMark::X)
@@ -131,7 +141,7 @@ impl TicTacToe {
         self.next_mark = match self.next_mark {
             TileMark::X => TileMark::O,
             TileMark::O => TileMark::X,
-            TileMark::None => todo!(),
+            TileMark::None => panic!("None player is marked!"),
         }
     }
 
