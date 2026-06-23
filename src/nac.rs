@@ -118,16 +118,11 @@ impl NoughtsAndCrosses {
     }
 
     fn has_won(&self, player: TileMark) -> bool {
-        let player_board = self.get_player_bitboard(player);
-        for mask in WINNING_MASKS {
-            if (player_board & mask) == mask {
-                return true;
-            }
-        }
-        false
+        let board = self.mask_board_for(player);
+        WINNING_MASKS.iter().any(|&mask| (board & mask) == mask)
     }
 
-    fn get_player_bitboard(&self, player: TileMark) -> u16 {
+    fn mask_board_for(&self, player: TileMark) -> u16 {
         let mut bitboard: u16 = 0;
 
         for (i, cell) in self.board.iter().enumerate() {
