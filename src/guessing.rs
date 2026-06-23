@@ -43,7 +43,7 @@ impl GuessingGame {
             let guess: i16 = match guess.parse() {
                 Ok(v) => v,
                 Err(_) => {
-                    println!("{BAD_INPUT}");
+                    println!("{BAD_INPUT}\n");
                     continue;
                 }
             };
