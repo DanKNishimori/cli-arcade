@@ -8,7 +8,7 @@ use rand::{prelude::*, rng};
 
 use super::input;
 use super::messages::*;
-use crate::tictactoe::BadCoodinateError::{OutRangeError, WrongSizeError};
+use crate::nac::BadCoodinateError::{OutRangeError, WrongSizeError};
 
 const ROW_OFFSET: usize = 3;
 const WINNING_MASKS: [u16; 8] = [
@@ -39,12 +39,12 @@ impl Display for TileMark {
     }
 }
 
-pub struct TicTacToe {
+pub struct NoughtsAndCrosses {
     board: [TileMark; 9],
     next_mark: TileMark,
     stdout: Stdout,
 }
-impl TicTacToe {
+impl NoughtsAndCrosses {
     pub fn new() -> Self {
         Self {
             board: [TileMark::None; 9],
@@ -60,6 +60,9 @@ impl TicTacToe {
             self.render_board();
             println!("{warning}");
             if let Some(result) = self.check_winner() {
+                if result == TileMark::None {
+                    println!("It is a TIE!")
+                }
                 println!("the {result} has won!");
                 break;
             }
@@ -222,7 +225,7 @@ mod tests {
 
     #[test]
     fn if_initial_board_is_empty() {
-        let game = TicTacToe::new();
+        let game = NoughtsAndCrosses::new();
         for i in 0..8 {
             assert_eq!(game.is_taken_tile(i), false);
         }
@@ -230,7 +233,7 @@ mod tests {
 
     #[test]
     fn if_the_board_is_updadte_properly() {
-        let mut game = TicTacToe::new();
+        let mut game = NoughtsAndCrosses::new();
         game.next_mark = TileMark::O;
         if let Err(e) = game.update_board(3) {
             panic!("{:?}", e);

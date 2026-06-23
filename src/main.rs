@@ -4,12 +4,12 @@ use std::io::{Write, stdout};
 
 mod guessing;
 mod messages;
-mod tictactoe;
+mod nac;
 
 use guessing::{GuessingGame, Hardness};
 use messages::*;
 
-use crate::tictactoe::TicTacToe;
+use crate::nac::NoughtsAndCrosses;
 
 fn main() {
     println!("{OPEN}");
@@ -35,8 +35,11 @@ fn main() {
             )
             .expect("some error");
             GuessingGame::new(hardness).start().unwrap(); // living dangerously
-        } else if command.starts_with("tictac") {
-            TicTacToe::new().randomize_player().start();
+        } else if command.starts_with("tictac")
+            || command.starts_with("noughts and crosses")
+            || command.starts_with("nac")
+        {
+            NoughtsAndCrosses::new().randomize_player().start();
         } else if command.starts_with("help") {
             println!("{HELP}");
         }
