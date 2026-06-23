@@ -1,6 +1,10 @@
+use crossterm::terminal::ClearType;
+use crossterm::terminal::ClearType::{CurrentLine, FromCursorDown};
 use crossterm::{cursor, execute, terminal};
 use rand::random_range;
 use std::cmp::Ordering;
+use std::io;
+use std::io::Stdout;
 
 use super::input;
 use super::messages::*;
@@ -10,36 +14,32 @@ const MINIMIUM_FOR_WIN: i16 = 7;
 pub struct GuessingGame {
     secret: i16,
     tries: i16,
+    stdout: Stdout,
 }
 impl GuessingGame {
     pub fn new(hardness: Hardness) -> GuessingGame {
         GuessingGame {
             secret: random_range(01..99),
             tries: give_tries(hardness),
+            stdout: io::stdout(),
         }
     }
 
-    pub fn start(&mut self) -> std::io::Result<()> {
-        let mut stdout = std::io::stdout();
-
+    pub fn start(&mut self) -> io::Result<()> {
         println!("{START_GUESSING_GAME}\n\n");
 
         loop {
-            execute!(
-                stdout,
-                cursor::MoveUp(3),
-                terminal::Clear(terminal::ClearType::CurrentLine)
-            )?;
-
             if !self.has_tries() {
+                self.clean(2, FromCursorDown)?;
                 print_loose_with(self.secret);
                 break;
             }
 
+            self.clean(3, CurrentLine)?;
+
             let Some(guess) = input(GET_GUESS) else {
                 continue;
             };
-
             let guess: i16 = match guess.parse() {
                 Ok(v) => v,
                 Err(_) => {
@@ -53,7 +53,7 @@ impl GuessingGame {
                 Ordering::Less => it_is_lower_hint(guess),
                 Ordering::Greater => it_is_higher_hint(guess),
                 Ordering::Equal => {
-                    execute!(stdout, terminal::Clear(terminal::ClearType::FromCursorDown))?;
+                    self.clean(0, FromCursorDown)?;
                     println!("{WIN}");
                     break;
                 }
@@ -68,6 +68,10 @@ impl GuessingGame {
 
     fn has_tries(&self) -> bool {
         self.tries >= 0
+    }
+
+    fn clean(&mut self, lines_up: u16, mode: ClearType) -> io::Result<()> {
+        execute!(self.stdout, cursor::MoveUp(lines_up), terminal::Clear(mode))
     }
 }
 
