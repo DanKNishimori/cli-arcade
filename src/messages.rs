@@ -32,6 +32,7 @@ COMMAND STRUCTURE:
 
 GAMES AVAILABLE:
   • guessing
+  • noughts and crosses (alias: tictactoe, tictac, nac)
 
 EXIT:
   • Type or add '&quit' to exit.
