@@ -122,16 +122,12 @@ impl NoughtsAndCrosses {
         WINNING_MASKS.iter().any(|&mask| (board & mask) == mask)
     }
 
-    fn mask_board_for(&self, player: TileMark) -> u16 {
-        let mut bitboard: u16 = 0;
-
-        for (i, cell) in self.board.iter().enumerate() {
-            if *cell == player {
-                bitboard |= 1 << i;
-            }
-        }
-
-        bitboard
+    fn mask_board_for(&self, player_mark: TileMark) -> u16 {
+        self.board
+            .iter()
+            .enumerate()
+            .filter(|&(_idx, cell_mark)| *cell_mark == player_mark)
+            .fold(0, |acc, (idx, _)| acc | 1 << idx)
     }
 
     fn clear_screen(&mut self) {
