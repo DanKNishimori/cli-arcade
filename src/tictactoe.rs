@@ -64,7 +64,8 @@ impl TicTacToe {
                 break;
             }
 
-            let raw_position = input("next mark: ");
+            let input_message = format!("{}'s time: ", self.next_mark);
+            let raw_position = input(&input_message);
 
             self.clear_screen();
 
